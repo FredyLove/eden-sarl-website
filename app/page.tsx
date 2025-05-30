@@ -1,103 +1,164 @@
-import Image from "next/image";
+import Image from 'next/image'
+import { FaCheck, FaTruck, FaShieldAlt, FaLeaf } from 'react-icons/fa'
 
 export default function Home() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    <>
+      {/* Hero Section */}
+      <section className="relative bg-blue-600 text-white py-20">
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="max-w-2xl">
+            <h1 className="text-4xl md:text-5xl font-bold mb-6">
+              Pure Water, Healthy Life
+            </h1>
+            <p className="text-xl mb-8">
+              Eden SARL delivers premium quality sachet water to your doorstep across Cameroon
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4">
+              <button className="bg-white text-blue-600 px-6 py-3 rounded-lg font-medium hover:bg-gray-100 transition">
+                Order Now
+              </button>
+              <button className="border-2 border-white text-white px-6 py-3 rounded-lg font-medium hover:bg-white hover:text-blue-600 transition">
+                Learn More
+              </button>
+            </div>
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
-  );
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-800 to-blue-500 opacity-90"></div>
+      </section>
+
+      {/* Features Section */}
+      <section className="py-16 bg-white">
+        <div className="container mx-auto px-4">
+          <h2 className="text-3xl font-bold text-center mb-12 text-gray-800">
+            Why Choose Eden Water?
+          </h2>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {[
+              {
+                icon: <FaShieldAlt className="text-3xl mb-4 text-blue-600" />,
+                title: "Quality Certified",
+                description: "Our water meets all national quality standards"
+              },
+              {
+                icon: <FaLeaf className="text-3xl mb-4 text-green-600" />,
+                title: "Pure & Natural" ,
+                description: "Sourced from protected natural springs"
+              },
+              {
+                icon: <FaTruck className="text-3xl mb-4 text-orange-500" />,
+                title: "Fast Delivery",
+                description: "Reliable delivery to your location"
+              },
+              {
+                icon: <FaCheck className="text-3xl mb-4 text-blue-600" />,
+                title: "Affordable",
+                description: "Premium quality at competitive prices"
+              }
+            ].map((feature, index) => (
+              <div key={index} className="text-center p-6 rounded-lg bg-gray-50 hover:shadow-md transition">
+                <div className="flex justify-center">{feature.icon}</div>
+                <h3 className="text-xl font-semibold mb-2 text-gray-800">{feature.title}</h3>
+                <p className="text-gray-600">{feature.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Product Showcase */}
+      <section className="py-16 bg-gray-50">
+        <div className="container mx-auto px-4">
+          <h2 className="text-3xl font-bold text-center mb-12 text-gray-800">
+            Our Products
+          </h2>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[
+              {
+                name: "Standard Pack",
+                description: "30 sachets of 500ml pure water",
+                price: "XAF 1,500"
+              },
+              {
+                name: "Family Pack",
+                description: "60 sachets of 500ml pure water",
+                price: "XAF 2,800"
+              },
+              {
+                name: "Bulk Order",
+                description: "Custom quantities for businesses",
+                price: "Contact for pricing"
+              }
+            ].map((product, index) => (
+              <div key={index} className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition">
+                <div className="h-48 bg-blue-100 flex items-center justify-center">
+                  <Image 
+                    src="/eden-sarl-website/public/icons/1.png" 
+                    alt={product.name}
+                    width={200}
+                    height={200}
+                    className="object-contain"
+                  />
+                </div>
+                <div className="p-6">
+                  <h3 className="text-xl font-semibold mb-2 text-gray-800">{product.name}</h3>
+                  <p className="text-gray-600 mb-4">{product.description}</p>
+                  <p className="text-blue-600 font-bold">{product.price}</p>
+                  <button className="mt-4 w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition">
+                    Order Now
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials */}
+      <section className="py-16 bg-white">
+        <div className="container mx-auto px-4">
+          <h2 className="text-3xl font-bold text-center mb-12 text-gray-800">
+            What Our Customers Say
+          </h2>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[
+              {
+                quote: "Eden water has been our family's choice for years. Always fresh and reliable.",
+                author: "Marie T., Douala"
+              },
+              {
+                quote: "The quality is consistent and the delivery is always on time. Great service!",
+                author: "Jean P., Yaoundé"
+              },
+              {
+                quote: "As a restaurant owner, I trust Eden for my water supply. My customers love it.",
+                author: "Samuel K., Bafoussam"
+              }
+            ].map((testimonial, index) => (
+              <div key={index} className="bg-gray-50 p-6 rounded-lg">
+                <p className="text-gray-700 italic mb-4">"{testimonial.quote}"</p>
+                <p className="font-semibold text-gray-800">— {testimonial.author}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Call to Action */}
+      <section className="py-16 bg-blue-700 text-white">
+        <div className="container mx-auto px-4 text-center">
+          <h2 className="text-3xl font-bold mb-6">Ready to Experience Eden Water?</h2>
+          <p className="text-xl mb-8 max-w-2xl mx-auto">
+            Join thousands of satisfied customers across Cameroon
+          </p>
+          <button className="bg-white text-blue-600 px-8 py-3 rounded-lg font-bold hover:bg-gray-100 transition">
+            Place Your Order Today
+          </button>
+        </div>
+      </section>
+    </>
+  )
 }
