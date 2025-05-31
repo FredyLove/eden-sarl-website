@@ -1,31 +1,75 @@
+'use client';
+
+import { motion } from 'framer-motion'
 import Image from 'next/image'
 import { FaCheck, FaTruck, FaShieldAlt, FaLeaf } from 'react-icons/fa'
+
+const fadeInUp = {
+  hidden: { opacity: 0, y: 30},
+  visible: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: {delay: i * 0.2, duration: 0.6},
+  }),
+};
+
+const fadeInLeft = {
+  hidden: { opacity: 0, x: -40 },
+  visible: (i: number) => ({
+    opacity: 1,
+    x: 0,
+    transition: { delay: i * 0.15, duration: 0.6 },
+  }),
+};
+
+const fadeInRight = {
+  hidden: { opacity: 0, x: 40 },
+  visible: (i: number) => ({
+    opacity: 1,
+    x: 0,
+    transition: { delay: i * 0.15, duration: 0.6 },
+  }),
+};
+
+const zoomIn = {
+  hidden: { opacity: 0, scale: 0.9 },
+  visible: (i: number) => ({
+    opacity: 1,
+    scale: 1,
+    transition: { delay: i * 0.15, duration: 0.6 },
+  }),
+};
 
 export default function Home() {
   return (
     <>
       {/* Hero Section */}
-      <section className="relative bg-blue-600 text-white py-20">
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="max-w-2xl">
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">
-              Pure Water, Healthy Life
-            </h1>
-            <p className="text-xl mb-8">
-              Eden SARL delivers premium quality sachet water to your doorstep across Cameroon
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4">
-              <button className="bg-white text-blue-600 px-6 py-3 rounded-lg font-medium hover:bg-gray-100 transition">
-                Order Now
-              </button>
-              <button className="border-2 border-white text-white px-6 py-3 rounded-lg font-medium hover:bg-white hover:text-blue-600 transition">
-                Learn More
-              </button>
-            </div>
-          </div>
-        </div>
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-800 to-blue-500 opacity-90"></div>
-      </section>
+      <section className="relative bg-blue-600 text-white py-20 overflow-hidden">
+  <div className="container mx-auto px-4 relative z-10">
+    <motion.div
+      initial={{ opacity: 0, y: 40 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.8 }}
+      className="max-w-2xl"
+    >
+      <h1 className="text-4xl md:text-5xl font-bold mb-6">
+        Pure Water, Healthy Life
+      </h1>
+      <p className="text-xl mb-8">
+        Eden SARL delivers premium quality sachet water to your doorstep across Cameroon
+      </p>
+      <div className="flex flex-col sm:flex-row gap-4">
+        <button className="bg-white text-blue-600 px-6 py-3 rounded-lg font-medium hover:bg-gray-100 transition">
+          Order Now
+        </button>
+        <button className="border-2 border-white text-white px-6 py-3 rounded-lg font-medium hover:bg-white hover:text-blue-600 transition">
+          Learn More
+        </button>
+      </div>
+    </motion.div>
+  </div>
+  <div className="absolute inset-0 bg-gradient-to-r from-blue-800 to-blue-500 opacity-90"></div>
+</section>
 
       {/* Features Section */}
       <section className="py-16 bg-white">
@@ -57,11 +101,17 @@ export default function Home() {
                 description: "Premium quality at competitive prices"
               }
             ].map((feature, index) => (
-              <div key={index} className="text-center p-6 rounded-lg bg-gray-50 hover:shadow-md transition">
+              <motion.div key={index} className="text-center p-6 rounded-lg bg-gray-50 hover:shadow-md transition"
+              variants={fadeInUp}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.4 }}
+              custom={index}
+              >
                 <div className="flex justify-center">{feature.icon}</div>
                 <h3 className="text-xl font-semibold mb-2 text-gray-800">{feature.title}</h3>
                 <p className="text-gray-600">{feature.description}</p>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
@@ -70,9 +120,15 @@ export default function Home() {
       {/* Product Showcase */}
       <section className="py-16 bg-gray-50">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12 text-gray-800">
+          <motion.h2 className="text-3xl font-bold text-center mb-12 text-gray-800"
+          variants={fadeInUp}
+          initial={{opacity: 0, y: 20}}
+          whileInView="visible"
+          viewport={{once: true, amount: 0.4}}
+          transition={{duration: 0.6}}
+          >
             Our Products
-          </h2>
+          </motion.h2>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
@@ -92,7 +148,13 @@ export default function Home() {
                 price: "Contact for pricing"
               }
             ].map((product, index) => (
-              <div key={index} className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition">
+              <motion.div key={index} className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition"
+              variants={fadeInUp}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.4 }}
+              custom={index}
+              >
                 <div className="h-48 bg-blue-100 flex items-center justify-center">
                   <Image 
                     src="/eden-sarl-website/public/icons/1.png" 
@@ -110,7 +172,7 @@ export default function Home() {
                     Order Now
                   </button>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
@@ -119,9 +181,14 @@ export default function Home() {
       {/* Testimonials */}
       <section className="py-16 bg-white">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12 text-gray-800">
+          <motion.h2 className="text-3xl font-bold text-center mb-12 text-gray-800"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.4 }}
+          transition={{ duration: 0.6 }}
+          >
             What Our Customers Say
-          </h2>
+          </motion.h2>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
@@ -138,17 +205,29 @@ export default function Home() {
                 author: "Samuel K., Bafoussam"
               }
             ].map((testimonial, index) => (
-              <div key={index} className="bg-gray-50 p-6 rounded-lg">
+              <motion.div key={index} className="bg-gray-50 p-6 rounded-lg"
+              variants={fadeInUp}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true , amount: 0.4}}
+              custom={index}
+              >
                 <p className="text-gray-700 italic mb-4">"{testimonial.quote}"</p>
                 <p className="font-semibold text-gray-800">— {testimonial.author}</p>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
       </section>
 
       {/* Call to Action */}
-      <section className="py-16 bg-blue-700 text-white">
+      <motion.section
+        className="py-16 bg-blue-700 text-white"
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true , amount: 0.4}}
+        transition={{ duration: 0.8 }}
+      >
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl font-bold mb-6">Ready to Experience Eden Water?</h2>
           <p className="text-xl mb-8 max-w-2xl mx-auto">
@@ -158,7 +237,7 @@ export default function Home() {
             Place Your Order Today
           </button>
         </div>
-      </section>
+      </motion.section>
     </>
   )
 }

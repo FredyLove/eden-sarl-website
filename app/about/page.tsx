@@ -1,39 +1,34 @@
+'use client';
+
 export default function AboutPage() {
-    return (
-      <section className="py-16">
-        <div className="container mx-auto px-4">
-          <h1 className="text-4xl font-bold mb-8 text-white">About Eden SARL</h1>
-          
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            <div>
-              <h2 className="text-2xl font-semibold mb-4 text-blue-600">Our Story</h2>
-              <p className="text-amber-50 mb-6">
-                Founded in 2010, Eden SARL has grown from a small local water distributor to one of Cameroon's most trusted sachet water brands. Our mission is simple: provide clean, safe drinking water to communities across the country.
-              </p>
-              <p className="text-amber-50 mb-6">
-                Starting with just one production facility in Douala, we've expanded our operations to serve customers in major cities nationwide while maintaining our commitment to quality and affordability.
-              </p>
-            </div>
-            
-            <div>
-              <h2 className="text-2xl font-semibold mb-4 text-blue-600">Our Process</h2>
-              <ul className="space-y-4">
-                {[
-                  "Water sourced from protected natural springs",
-                  "Multi-stage filtration and purification",
-                  "UV treatment for complete sterilization",
-                  "Automated packaging in hygienic conditions",
-                  "Rigorous quality control at every stage"
-                ].map((item, index) => (
-                  <li key={index} className="flex items-start">
-                    <span className="text-green-500 mr-2">✓</span>
-                    <span className="text-white">{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
+  return (
+    <section className="max-w-6xl mx-auto px-6 py-16 text-white">
+      <h1 className="text-4xl font-bold mb-12">About Eden SARL</h1>
+
+      <div className="grid md:grid-cols-2 gap-12">
+        {/* Our Story */}
+        <div>
+          <h2 className="text-2xl font-semibold text-blue-500 mb-4">Our Story</h2>
+          <p className="text-base leading-relaxed">
+            Founded in 2010, Eden SARL has grown from a small local water distributor to one of Cameroon&apos;s most trusted sachet water brands. Our mission is simple: provide clean, safe drinking water to communities across the country.
+          </p>
+          <p className="text-base leading-relaxed mt-4">
+            Starting with just one production facility in Douala, we&apos;ve expanded our operations to serve customers in major cities nationwide while maintaining our commitment to quality and affordability.
+          </p>
         </div>
-      </section>
-    )
-  }
+
+        {/* Our Process */}
+        <div>
+          <h2 className="text-2xl font-semibold text-blue-500 mb-4">Our Process</h2>
+          <ul className="list-disc list-inside space-y-3 text-green-400">
+            <li>Water sourced from protected natural springs</li>
+            <li>Multi-stage filtration and purification</li>
+            <li>UV treatment for complete sterilization</li>
+            <li>Automated packaging in hygienic conditions</li>
+            <li>Rigorous quality control at every stage</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  );
+}
