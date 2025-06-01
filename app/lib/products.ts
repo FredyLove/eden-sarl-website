@@ -2,46 +2,64 @@ import { describe } from "node:test";
 
 export const products = [
     {
-      id: 'standard-500ml',
-      name: 'Standard Pack (500ml)',
-      description: '30 sachets of pure drinking water',
-      price: 'XAF 1,500',
-      image: '/images/coup-moyen-de-femme-buvant-de-l-eau.jpg'
+      id: 'Reaktor',
+      name: "Reaktor",
+      description: "Very Energetic drink",
+      price: "XAF 6,500",
+      image: "/images/reaktor.png",
+      category: "Bottled",
+      isPopular: true,
+      rating: 3.5
     },
     {
-      id: 'family-500ml',
-      name: 'Family Pack (500ml)',
-      description: '60 sachets for family use',
-      price: 'XAF 2,800',
-      image: '/images/gros-plan-homme-versant-de-l-eau.jpg'
+      id: 'VanPur',
+      name: "Malta Van Pur",
+      description: "Bottles of pure Drink",
+      price: "XAF 8,500",
+      image: "/images/vanpur-malt.jpg",
+      category: "Bottled",
+      isPopular: true,
+      rating: 3.5
     },
     {
-      id: 'premium-1L',
-      name: 'Premium Bottle (1L)',
-      description: '12 bottles of mineral water',
-      price: 'XAF 3,500',
-      image: '/images/premium-bottle.png'
+      id: 'Diapers',
+      name: "Disposable diapers",
+      description: "Custom quantities of disposable diapers for your child",
+      price: "XAF 7,000",
+      image: "/images/couches-jetables.jpg",
+      category: "Child",
+      isPopular: true,
+      rating: 3.5
     },
     {
-      id: 'bottle-2',
-      name: 'Eden Sparkling Water - 1L',
-      description: 'Crisp and refreshing sparkling water in 1L bottle.',
-      price: 'XAF 600',
-      image: '/images/bottle-2.png',
+      id: 'Slippers',
+      name: 'Slippers',
+      description: 'Very Comfortable for home purposes',
+      price: 'XAF 5000',
+      image: '/images/barbouches.jpg',
+      category: "Shoes",
+      isPopular: true,
+      rating: 4
     },
     {
-      id: 'bottle-1',
-      name: 'Eden Pure Water - 1.5L',
-      description: 'Fresh natural water in 1.5L bottle.',
-      price: 'XAF 500',
-      image: '/images/bottle-1.png',
+      id: 'Sachet',
+      name: 'Sachet of Water',
+      description: 'Premium sachet of pure water for a healthy life',
+      price: 'XAF 1000',
+      image: '/images/sachet.jpg',
+      category: "Sachet",
+      isPopular: true,
+      rating: 3.5
     },
     {
-      id: 'Reactor-500ml',
-      name: 'Reactor',
-      description: 'Very good for energy',
-      price: 'XAF 500',
-      image: '/images/reactor.png'
+      id: 'Malta',
+      name: 'Simple Malta',
+      description: 'Bottles of pure malta drink',
+      price: 'XAF 7,500',
+      image: '/images/malta.jpg',
+      category: "Juice",
+      isPopular: true,
+      rating: 3
     }
     
   ]

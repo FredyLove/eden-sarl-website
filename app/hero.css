@@ -1,0 +1,21 @@
+.bubble {
+  position: absolute;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.1);
+  animation: bubbleRight linear infinite;
+  opacity: 0;
+}
+
+@keyframes bubbleRight {
+  0% { 
+    transform: translateX(0) scale(0.5); 
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.15;
+  }
+  100% { 
+    transform: translateX(calc(100vw + 30px)) scale(1.2); 
+    opacity: 0;
+  }
+}
