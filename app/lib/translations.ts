@@ -267,6 +267,7 @@ register_reg: "Register",
   already_have_account: "Already have an account?",
   login_reg: "Sign in instead",
   back: "Go back",
+  popular: 'Popular',
 
 
 
@@ -513,6 +514,7 @@ login_title: "Content de vous revoir",
   email: "Adresse Email",
   email_placeholder: "votre@email.com",
   password: "Mot de Passe",
+  popular: 'Populaire',
   password_placeholder: "••••••••",
   forgot_password: "Mot de passe oublié ?",
   no_account: "Pas de compte ?",
