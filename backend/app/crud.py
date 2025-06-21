@@ -164,3 +164,24 @@ def get_user_bookmarks(db: Session, user_id: int):
     if user:
         return user.bookmarks
     return []
+
+# Notifications
+
+def create_notification(db: Session, user_id: int, message: str):
+    notification = models.Notification(user_id=user_id, message=message)
+    db.add(notification)
+    db.commit()
+    db.refresh(notification)
+    return notification
+
+def get_user_notifications(db: Session, user_id: int):
+    return db.query(models.Notification)\
+        .filter(models.Notification.user_id == user_id)\
+             .order_by(models.Notification.created_at.desc())\
+             .all()
+
+def mark_all_as_read(db: Session, user_id: int):
+    db.query(models.Notification)\
+      .filter(models.Notification.user_id == user_id)\
+      .update({"is_read": True})
+    db.commit()

@@ -5,15 +5,31 @@ from app.dependencies import get_current_user, get_current_admin_user
 
 router = APIRouter(prefix="/products", tags=["Products"])
 
+
 @router.post("/", response_model=schemas.ProductOut)
 def create_product(
     product: schemas.ProductCreate,
     db: Session = Depends(database.get_db),
     current_admin: models.User = Depends(get_current_admin_user)
 ):
-    return crud.create_product(db, product)
+    # Create the product
+    new_product = crud.create_product(db, product)
 
-@router.get("/", response_model=list[schemas.ProductOut])
+    # Get all active users
+    users = db.query(models.User).filter(models.User.is_active == True).all()
+
+    # Notify each user about the new product
+    for user in users:
+        crud.create_notification(
+            db,
+            user_id=user.id,
+            message=f"A new product '{new_product.name}' has been added!"
+        )
+
+    return new_product
+
+
+@router.get("/", response_model=list[schemas.ProductOut]) 
 def list_products(
     skip: int = 0,
     limit: int = 100,
@@ -54,6 +70,7 @@ def read_product(product_id: int, db: Session = Depends(database.get_db)):
         raise HTTPException(status_code=404, detail="Product not found")
     return product
 
+
 @router.put("/{product_id}", response_model=schemas.ProductOut)
 def update_product(
     product_id: int,
@@ -65,6 +82,7 @@ def update_product(
     if not updated:
         raise HTTPException(status_code=404, detail="Product not found")
     return updated
+
 
 @router.delete("/{product_id}", response_model=schemas.ProductOut)
 def delete_product(

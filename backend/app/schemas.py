@@ -139,3 +139,20 @@ class BookmarkedProduct(BaseModel):
 
     class Config:
         from_attributes = True
+        
+# Notifications
+
+class NotificationBase(BaseModel):
+    message: str
+
+class NotificationCreate(NotificationBase):
+    user_id: int
+
+class NotificationOut(NotificationBase):
+    id: int
+    is_read: bool
+    message: str
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
