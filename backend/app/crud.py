@@ -1,4 +1,6 @@
 # app/crud.py
+from datetime import datetime
+from sqlalchemy import func
 from sqlalchemy.orm import Session
 from passlib.context import CryptContext
 from . import models, schemas
@@ -86,3 +88,38 @@ def update_delivery_status(db: Session, delivery_id: int, status: str):
         delivery.status = status
         db.commit()
     return delivery
+
+# Review
+
+
+def create_or_update_review(db: Session, user_id: int, review_data: schemas.ReviewCreate):
+    existing = db.query(models.ProductReview).filter_by(
+        user_id=user_id,
+        product_id=review_data.product_id
+    ).first()
+
+    if existing:
+        existing.rating = review_data.rating
+        existing.comment = review_data.comment
+        existing.updated_at = datetime.utcnow()
+        db.commit()
+        db.refresh(existing)
+        return existing
+    else:
+        new_review = models.ProductReview(
+            user_id=user_id,
+            product_id=review_data.product_id,
+            rating=review_data.rating,
+            comment=review_data.comment,
+        )
+        db.add(new_review)
+        db.commit()
+        db.refresh(new_review)
+        return new_review
+
+def get_reviews_by_product(db: Session, product_id: int):
+    return db.query(models.ProductReview).filter_by(product_id=product_id).all()
+
+def get_average_rating(db: Session, product_id: int) -> float:
+    result = db.query(func.avg(models.ProductReview.rating)).filter_by(product_id=product_id).scalar()
+    return round(result or 0.0, 2)

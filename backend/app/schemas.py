@@ -1,6 +1,6 @@
 # app/schemas.py
 from datetime import datetime
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, conint
 from typing import Optional
 from enum import Enum
 
@@ -73,7 +73,7 @@ class ProductOut(ProductBase):
     class Config:
         orm_mode = True
 
-# Deleveries
+# Deliveries
 
 class DeliveryStatus(str, Enum):
     pending = "pending"
@@ -95,6 +95,28 @@ class DeliveryRequestOut(BaseModel):
     quantity: int
     address: str
     status: DeliveryStatus
+
+    class Config:
+        from_attributes = True
+        
+# Reviews
+
+class ReviewBase(BaseModel):
+    rating: conint(ge=1, le=5)  # restrict to 1-5
+    comment: Optional[str] = None
+
+class ReviewCreate(ReviewBase):
+    product_id: int
+
+class ReviewUpdate(ReviewBase):
+    pass
+
+class ReviewOut(ReviewBase):
+    id: int
+    user_id: int
+    product_id: int
+    created_at: datetime
+    updated_at: datetime
 
     class Config:
         from_attributes = True
