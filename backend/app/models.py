@@ -1,10 +1,16 @@
-# app/models.py
-from sqlalchemy import Column, DateTime, Float, ForeignKey, Integer, String, Boolean, Enum
+from sqlalchemy import Table, Column, DateTime, Float, ForeignKey, Integer, String, Boolean, Enum
 from .database import Base
 from sqlalchemy.orm import relationship
 import enum
 from datetime import datetime
 
+# ✅ Bookmarks association table
+user_bookmarks = Table(
+    "user_bookmarks",
+    Base.metadata,
+    Column("user_id", Integer, ForeignKey("users.id"), primary_key=True),
+    Column("product_id", Integer, ForeignKey("products.id"), primary_key=True),
+)
 
 class User(Base):
     __tablename__ = "users"
@@ -15,9 +21,13 @@ class User(Base):
     hashed_password = Column(String, nullable=False)
     is_active = Column(Boolean, default=True)
     role = Column(String, default="user")
-    
-    reviews = relationship("ProductReview", back_populates="user", cascade="all, delete")
 
+    reviews = relationship("ProductReview", back_populates="user", cascade="all, delete")
+    bookmarks = relationship(
+        "Product",
+        secondary=user_bookmarks,
+        back_populates="bookmarked_by"
+    )
 
 class Product(Base):
     __tablename__ = "products"
@@ -33,10 +43,13 @@ class Product(Base):
     rating = Column(Float, default=0.0)
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
-    
-    reviews = relationship("ProductReview", back_populates="product", cascade="all, delete")
-    
 
+    reviews = relationship("ProductReview", back_populates="product", cascade="all, delete")
+    bookmarked_by = relationship(
+        "User",
+        secondary=user_bookmarks,
+        back_populates="bookmarks"
+    )
 
 class ProductReview(Base):
     __tablename__ = "product_reviews"
@@ -52,7 +65,6 @@ class ProductReview(Base):
     user = relationship("User", back_populates="reviews")
     product = relationship("Product", back_populates="reviews")
 
-    
 class DeliveryStatus(str, enum.Enum):
     pending = "pending"
     approved = "approved"

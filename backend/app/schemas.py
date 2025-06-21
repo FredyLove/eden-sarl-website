@@ -120,3 +120,22 @@ class ReviewOut(ReviewBase):
 
     class Config:
         from_attributes = True
+        
+# Bookmark
+
+class BookmarkAction(BaseModel):
+    product_id: int
+
+
+class BookmarkedProduct(BaseModel):
+    id: int
+    name: str
+    description: Optional[str] = None
+    image: Optional[str] = None
+    price: float
+    category: Optional[str] = None
+    isPopular: bool
+    rating: float
+
+    class Config:
+        from_attributes = True

@@ -14,8 +14,38 @@ def create_product(
     return crud.create_product(db, product)
 
 @router.get("/", response_model=list[schemas.ProductOut])
-def list_products(skip: int = 0, limit: int = 100, db: Session = Depends(database.get_db)):
-    return crud.get_products(db, skip, limit)
+def list_products(
+    skip: int = 0,
+    limit: int = 100,
+    category: str = None,
+    is_popular: bool = None,
+    min_price: float = None,
+    max_price: float = None,
+    search: str = None,
+    db: Session = Depends(database.get_db)
+):
+    query = db.query(models.Product)
+
+    if category:
+        query = query.filter(models.Product.category == category)
+
+    if is_popular is not None:
+        query = query.filter(models.Product.isPopular == is_popular)
+
+    if min_price is not None:
+        query = query.filter(models.Product.price >= min_price)
+
+    if max_price is not None:
+        query = query.filter(models.Product.price <= max_price)
+
+    if search:
+        query = query.filter(
+            models.Product.name.ilike(f"%{search}%") |
+            models.Product.description.ilike(f"%{search}%")
+        )
+
+    return query.offset(skip).limit(limit).all()
+
 
 @router.get("/{product_id}", response_model=schemas.ProductOut)
 def read_product(product_id: int, db: Session = Depends(database.get_db)):

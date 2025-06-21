@@ -2,6 +2,7 @@
 from datetime import datetime
 from sqlalchemy import func
 from sqlalchemy.orm import Session
+from sqlalchemy.exc import NoResultFound
 from passlib.context import CryptContext
 from . import models, schemas
 from .auth import verify_password
@@ -123,3 +124,43 @@ def get_reviews_by_product(db: Session, product_id: int):
 def get_average_rating(db: Session, product_id: int) -> float:
     result = db.query(func.avg(models.ProductReview.rating)).filter_by(product_id=product_id).scalar()
     return round(result or 0.0, 2)
+
+# Bookmarks
+
+
+# ✅ Add bookmark
+def add_bookmark(db: Session, user_id: int, product_id: int):
+    user = db.query(models.User).filter(models.User.id == user_id).first()
+    product = db.query(models.Product).filter(models.Product.id == product_id).first()
+
+    if not user or not product:
+        return None
+
+    if product in user.bookmarks:
+        return product  # Already bookmarked
+
+    user.bookmarks.append(product)
+    db.commit()
+    return product
+
+# ✅ Remove bookmark
+def remove_bookmark(db: Session, user_id: int, product_id: int):
+    user = db.query(models.User).filter(models.User.id == user_id).first()
+    product = db.query(models.Product).filter(models.Product.id == product_id).first()
+
+    if not user or not product:
+        return None
+
+    if product in user.bookmarks:
+        user.bookmarks.remove(product)
+        db.commit()
+        return True
+
+    return False
+
+# ✅ List user’s bookmarks
+def get_user_bookmarks(db: Session, user_id: int):
+    user = db.query(models.User).filter(models.User.id == user_id).first()
+    if user:
+        return user.bookmarks
+    return []
