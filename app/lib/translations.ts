@@ -78,13 +78,20 @@ export const translations = {
       cta_subtitle: 'Join thousands of satisfied customers across Cameroon',
   
       // Footer
-      footer_description: 'Providing clean, safe drinking water to communities across Cameroon.',
-      footer_quick_links: 'Quick Links',
-      footer_contact_title: 'Contact Us',
-      footer_location: 'Yaounde, Cameroon',
-      footer_phone: 'Phone: +237 690 897 119',
-      footer_email: 'Email: info@eden-sarl.cm',
-      footer_rights: 'All rights reserved.',
+      "footer_description": "Your trusted partner for quality products and exceptional service.",
+  "footer_quick_links": "Quick Links",
+  "footer_contact_title": "Contact Us",
+  "footer_location": "Nkometou, Yaounde, Cameroon",
+  "footer_phone": "+(237) 690-897-119",
+  "footer_email": "contact@edensarl.com",
+  "footer_newsletter_title": "Stay Updated",
+  "footer_newsletter_text": "Subscribe to our newsletter for updates and offers.",
+  "footer_email_placeholder": "Your email address",
+  "footer_subscribe": "Subscribe",
+  "footer_rights": "All rights reserved.",
+  "footer_privacy": "Privacy Policy",
+  "footer_terms": "Terms of Service",
+  "footer_cookies": "Cookie Policy",
   
       // About
       about_title: "About Eden SARL",
@@ -269,7 +276,7 @@ register_reg: "Register",
   back: "Go back",
   popular: 'Popular',
 
-
+//Admin Product
 
 
     },
@@ -353,13 +360,20 @@ register_reg: "Register",
       cta_subtitle: 'Rejoignez des milliers de clients satisfaits à travers le Cameroun',
   
       // Footer
-      footer_description: 'Fournir de l’eau potable et propre aux communautés à travers le Cameroun.',
-      footer_quick_links: 'Liens rapides',
-      footer_contact_title: 'Contactez-nous',
-      footer_location: 'Yaounde, Cameroun',
-      footer_phone: 'Téléphone : +237 690 897 119',
-      footer_email: 'Email : info@eden-sarl.cm',
-      footer_rights: 'Tous droits réservés.',
+      "footer_description": "Votre partenaire de confiance pour des produits de qualité et un service exceptionnel.",
+  "footer_quick_links": "Liens Rapides",
+  "footer_contact_title": "Contactez-Nous",
+  "footer_location": "Nkometou, Yaounde, Cameroon",
+  "footer_phone": "(+237) 690-897-119",
+  "footer_email": "contact@edensarl.com",
+  "footer_newsletter_title": "Restez Informé",
+  "footer_newsletter_text": "Abonnez-vous à notre newsletter pour les mises à jour et offres.",
+  "footer_email_placeholder": "Votre adresse email",
+  "footer_subscribe": "S'abonner",
+  "footer_rights": "Tous droits réservés.",
+  "footer_privacy": "Politique de Confidentialité",
+  "footer_terms": "Conditions d'Utilisation",
+  "footer_cookies": "Politique de Cookies",
   
       // About
       about_title: "À propos d'Eden SARL",

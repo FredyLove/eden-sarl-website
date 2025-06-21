@@ -48,7 +48,7 @@ export default function AboutPage() {
           <FadeIn variant="fadeInRight">
             <div className="relative h-96 rounded-xl overflow-hidden shadow-xl">
               <Image
-                src="/images/about-factory.jpg"
+                src="/images/factory.jpg"
                 alt={t.about_image_alt}
                 fill
                 className="object-cover"

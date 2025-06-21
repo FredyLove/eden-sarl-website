@@ -10,12 +10,16 @@ import { FaMapMarkerAlt, FaPhone, FaUser, FaShoppingBag, FaMoneyBillWave, FaChec
 import { MdLocationOn } from 'react-icons/md';
 import toast from 'react-hot-toast';
 import FadeIn from '@/components/FadeIn';
+import { useOrders } from '../context/OrderContext';
+import { v4 as uuidv4 } from 'uuid';
 
-const Map = dynamic(() => import('@/components/MapPicker'), { 
+const Map = dynamic(() => import('@/components/MapPicker'), {
   ssr: false,
-  loading: () => <div className="h-full bg-gray-100 rounded-lg flex items-center justify-center">
-    <p>Loading map...</p>
-  </div>
+  loading: () => (
+    <div className="h-full bg-gray-100 rounded-lg flex items-center justify-center">
+      <p>Loading map...</p>
+    </div>
+  )
 });
 
 export default function CheckoutPage() {
@@ -24,6 +28,7 @@ export default function CheckoutPage() {
   const { language } = useLanguage();
   const t = translations[language];
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { addOrder } = useOrders();
 
   const [form, setForm] = useState({
     name: '',
@@ -38,22 +43,24 @@ export default function CheckoutPage() {
 
     try {
       const order = {
+        id: uuidv4(),
         customer: form,
         location,
         items: cart,
         total: getTotal(),
-        date: new Date().toISOString()
+        date: new Date().toISOString(),
+        status: 'pending' as 'pending' | 'delivered'
       };
 
-      // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 1500));
-      console.log('Order placed:', order);
-      
+      addOrder(order);
+
       toast.success(t.order_success, {
         duration: 4000,
         position: 'bottom-right',
         icon: <FaCheckCircle className="text-green-500" />
       });
+
       clearCart();
     } catch (error) {
       toast.error(t.order_error);
@@ -72,7 +79,7 @@ export default function CheckoutPage() {
             <p className="text-gray-600 mb-6">{t.empty_cart_message}</p>
             <a
               href="/products"
-              className="inline-block bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition"
+              className="inline-block bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition cursor-pointer"
             >
               {t.browse_products}
             </a>
@@ -91,135 +98,110 @@ export default function CheckoutPage() {
         </FadeIn>
 
         <div className="grid lg:grid-cols-[2fr_1fr] gap-8">
-          {/* Left: Customer Info */}
+          {/* Form Section */}
           <FadeIn variant="fadeInLeft">
-            <form onSubmit={handleSubmit} className="bg-white p-6 md:p-8 rounded-xl shadow-md">
-              <div className="space-y-6">
-                {/* Personal Info */}
-                <div>
-                  <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center gap-2">
-                    <FaUser className="text-blue-500" />
-                    {t.personal_info}
-                  </h2>
-                  <div className="space-y-4">
-                    <div>
-                      <label htmlFor="name" className="block text-gray-700 mb-1">{t.full_name}</label>
-                      <input
-                        type="text"
-                        id="name"
-                        value={form.name}
-                        onChange={(e) => setForm({ ...form, name: e.target.value })}
-                        required
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
-                      />
-                    </div>
-                    <div>
-                      <label htmlFor="phone" className="block text-gray-700 mb-1">{t.phone_number}</label>
-                      <input
-                        type="tel"
-                        id="phone"
-                        value={form.phone}
-                        onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                        required
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
-                      />
-                    </div>
-                  </div>
+            <form onSubmit={handleSubmit} className="bg-white p-6 md:p-8 rounded-xl shadow-md space-y-6">
+              {/* Personal Info */}
+              <div>
+                <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center gap-2">
+                  <FaUser className="text-blue-500" />
+                  {t.personal_info}
+                </h2>
+                <div className="space-y-4">
+                  <input
+                    type="text"
+                    placeholder={t.full_name}
+                    value={form.name}
+                    onChange={(e) => setForm({ ...form, name: e.target.value })}
+                    required
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+                  />
+                  <input
+                    type="tel"
+                    placeholder={t.phone_number}
+                    value={form.phone}
+                    onChange={(e) => setForm({ ...form, phone: e.target.value })}
+                    required
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+                  />
                 </div>
-
-                {/* Delivery Info */}
-                <div>
-                  <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center gap-2">
-                    <FaMapMarkerAlt className="text-blue-500" />
-                    {t.delivery_info}
-                  </h2>
-                  <div className="space-y-4">
-                    <div>
-                      <label htmlFor="address" className="block text-gray-700 mb-1">{t.address}</label>
-                      <input
-                        type="text"
-                        id="address"
-                        value={form.address}
-                        onChange={(e) => setForm({ ...form, address: e.target.value })}
-                        required
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-gray-700 mb-2">{t.select_location}</label>
-                      <div className="h-64 rounded-lg overflow-hidden border border-gray-300">
-                        <Map onSelect={setLocation} />
-                      </div>
-                      {location && (
-                        <p className="mt-2 text-sm text-green-600 flex items-center">
-                          <MdLocationOn className="mr-1" />
-                          {t.location_selected}
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Payment Method */}
-                <div>
-                  <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center gap-2">
-                    <FaMoneyBillWave className="text-blue-500" />
-                    {t.payment_method}
-                  </h2>
-                  <div className="space-y-3">
-                    <label className="flex items-center space-x-3 cursor-pointer">
-                      <input
-                        type="radio"
-                        name="paymentMethod"
-                        checked={form.paymentMethod === 'cash'}
-                        onChange={() => setForm({ ...form, paymentMethod: 'cash' })}
-                        className="h-5 w-5 text-blue-600 focus:ring-blue-500"
-                      />
-                      <span className="text-gray-700">{t.cash_on_delivery}</span>
-                    </label>
-                    <label className="flex items-center space-x-3 cursor-pointer">
-                      <input
-                        type="radio"
-                        name="paymentMethod"
-                        checked={form.paymentMethod === 'mobile'}
-                        onChange={() => setForm({ ...form, paymentMethod: 'mobile' })}
-                        className="h-5 w-5 text-blue-600 focus:ring-blue-500"
-                      />
-                      <span className="text-gray-700">{t.mobile_payment}</span>
-                    </label>
-                  </div>
-                </div>
-
-                <button
-                  type="submit"
-                  disabled={!location || isSubmitting}
-                  className={`w-full py-3 px-6 rounded-lg font-medium text-white transition flex items-center justify-center gap-2 ${
-                    !location || isSubmitting
-                      ? 'bg-gray-400 cursor-not-allowed'
-                      : 'bg-blue-600 hover:bg-blue-700'
-                  }`}
-                >
-                  {isSubmitting ? (
-                    <span className="animate-pulse">{t.processing_order}</span>
-                  ) : (
-                    <>
-                      <FaCheckCircle />
-                      {t.place_an_order}
-                    </>
-                  )}
-                </button>
               </div>
+
+              {/* Address & Map */}
+              <div>
+                <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center gap-2">
+                  <FaMapMarkerAlt className="text-blue-500" />
+                  {t.delivery_info}
+                </h2>
+                <input
+                  type="text"
+                  placeholder={t.address}
+                  value={form.address}
+                  onChange={(e) => setForm({ ...form, address: e.target.value })}
+                  required
+                  className="w-full mb-4 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 transition"
+                />
+                <div className="h-64 rounded-lg overflow-hidden border border-gray-300">
+                  <Map onSelect={setLocation} />
+                </div>
+                {location && (
+                  <p className="mt-2 text-sm text-green-600 flex items-center">
+                    <MdLocationOn className="mr-1" />
+                    {t.location_selected}
+                  </p>
+                )}
+              </div>
+
+              {/* Payment */}
+              <div>
+                <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center gap-2">
+                  <FaMoneyBillWave className="text-blue-500" />
+                  {t.payment_method}
+                </h2>
+                <div className="space-y-3">
+                  {['cash', 'mobile'].map(method => (
+                    <label key={method} className="flex items-center gap-3 cursor-pointer">
+                      <input
+                        type="radio"
+                        name="paymentMethod"
+                        checked={form.paymentMethod === method}
+                        onChange={() => setForm({ ...form, paymentMethod: method as 'cash' | 'mobile' })}
+                        className="h-5 w-5 text-blue-600"
+                      />
+                      <span className="text-gray-700">{t[`${method}_payment`]}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              <button
+                type="submit"
+                disabled={!location || isSubmitting}
+                className={`w-full py-3 px-6 rounded-lg font-medium text-white transition flex items-center justify-center gap-2 ${
+                  !location || isSubmitting
+                    ? 'bg-gray-400 cursor-not-allowed'
+                    : 'bg-blue-600 hover:bg-blue-700 cursor-pointer'
+                }`}
+              >
+                {isSubmitting ? (
+                  <span className="animate-pulse">{t.processing_order}</span>
+                ) : (
+                  <>
+                    <FaCheckCircle />
+                    {t.place_an_order}
+                  </>
+                )}
+              </button>
             </form>
           </FadeIn>
 
-          {/* Right: Order Summary */}
+          {/* Order Summary */}
           <FadeIn variant="fadeInRight">
             <div className="bg-white p-6 md:p-8 rounded-xl shadow-md h-fit sticky top-4">
               <h2 className="text-xl font-semibold text-gray-800 mb-6 flex items-center gap-2">
                 <FaShoppingBag className="text-blue-500" />
                 {t.order_summary}
               </h2>
-
               <ul className="space-y-4 mb-6">
                 {cart.map((item) => (
                   <li key={item.id} className="flex justify-between items-center border-b border-gray-100 pb-3">
@@ -227,11 +209,10 @@ export default function CheckoutPage() {
                       <p className="font-medium text-gray-800">{item.name}</p>
                       <p className="text-sm text-gray-500">Qty: {item.quantity}</p>
                     </div>
-                    <p className="font-medium">{item.price}</p>
+                    <p className="font-medium">XAF {item.price}</p>
                   </li>
                 ))}
               </ul>
-
               <div className="space-y-3 border-t border-gray-200 pt-4">
                 <div className="flex justify-between text-gray-600">
                   <span>{t.subtotal_checkout}</span>

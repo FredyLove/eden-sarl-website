@@ -18,6 +18,18 @@ export default function Header() {
   const [accountOpen, setAccountOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
 
+  // Initialize mounted state and animation values consistently
+  const [animationValues] = useState(() => ({
+    items: Array(8).fill(0).map(() => ({
+      width: `${10 + Math.random() * 20}px`,
+      height: `${10 + Math.random() * 20}px`,
+      left: `${Math.random() * 80}%`,
+      top: `${Math.random() * 80}%`,
+      duration: `${10 + Math.random() * 15}s`,
+      delay: `${Math.random() * 5}s`
+    }))
+  }));
+
   useEffect(() => {
     setMounted(true);
     const handleScroll = () => {
@@ -66,8 +78,12 @@ export default function Header() {
           <div className="flex items-center space-x-4">
             {/* Language Selector */}
             <div className="hidden md:block">
+              <label htmlFor="language-select" className="sr-only">
+                {t.selectLanguage}
+              </label>
               <select
-                onChange={(e) => setLanguage(e.target.value as any)}
+                id="language-select"
+                onChange={(e) => setLanguage(e.target.value as 'en' | 'fr')}
                 value={language}
                 className="text-sm px-3 py-1.5 rounded-lg border border-gray-200 bg-white hover:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-500 transition-all"
               >
@@ -79,7 +95,7 @@ export default function Header() {
             {/* Cart */}
             <Link href="/cart" className="p-2 relative rounded-full hover:bg-gray-50 transition-colors">
               <ShoppingCartIcon className="w-5 h-5 text-gray-600" />
-              {cart.length > 0 && (
+              {mounted && cart.length > 0 && (
                 <span className="absolute top-0 right-0 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
                   {cart.length}
                 </span>
@@ -91,21 +107,25 @@ export default function Header() {
               <button
                 onClick={() => setAccountOpen((prev) => !prev)}
                 className="p-2 rounded-full hover:bg-gray-50 transition-colors"
+                aria-label="Account menu"
+                aria-expanded={accountOpen}
               >
                 <UserIcon className="w-5 h-5 text-gray-600" />
               </button>
 
-              {mounted && accountOpen && (
+              {accountOpen && mounted && (
                 <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 py-1 z-50">
                   <Link
                     href="/login"
                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+                    onClick={() => setAccountOpen(false)}
                   >
                     {t.login}
                   </Link>
                   <Link
                     href="/register"
                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+                    onClick={() => setAccountOpen(false)}
                   >
                     {t.register}
                   </Link>
@@ -117,6 +137,8 @@ export default function Header() {
             <button
               onClick={() => setMenuOpen(!menuOpen)}
               className="md:hidden p-2 rounded-md text-gray-500 hover:text-gray-900 hover:bg-gray-100 focus:outline-none"
+              aria-label="Mobile menu"
+              aria-expanded={menuOpen}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -137,7 +159,7 @@ export default function Header() {
       </div>
 
       {/* Mobile menu */}
-      {menuOpen && (
+      {menuOpen && mounted && (
         <div className="md:hidden bg-white shadow-lg">
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
             {[
@@ -162,8 +184,12 @@ export default function Header() {
           </div>
           <div className="pt-4 pb-3 border-t border-gray-200">
             <div className="flex items-center px-5 space-x-4">
+              <label htmlFor="mobile-language-select" className="sr-only">
+                {t.selectLanguage}
+              </label>
               <select
-                onChange={(e) => setLanguage(e.target.value as any)}
+                id="mobile-language-select"
+                onChange={(e) => setLanguage(e.target.value as 'en' | 'fr')}
                 value={language}
                 className="text-sm px-3 py-1.5 rounded-lg border border-gray-200 bg-white"
               >
@@ -188,6 +214,24 @@ export default function Header() {
           </div>
         </div>
       )}
+
+      {/* Animated background elements - now with consistent values */}
+      <div className="fixed inset-0 overflow-hidden -z-10 pointer-events-none">
+        {animationValues.items.map((item, index) => (
+          <div
+            key={index}
+            style={{
+              width: item.width,
+              height: item.height,
+              left: item.left,
+              top: item.top,
+              animation: `float ${item.duration} ease-in-out infinite`,
+              animationDelay: item.delay
+            }}
+            className="absolute rounded-full bg-white/10 backdrop-blur-sm"
+          />
+        ))}
+      </div>
     </header>
   );
 }

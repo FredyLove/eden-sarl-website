@@ -6,6 +6,7 @@ import Footer from '@/components/Footer';
 import { CartProvider } from './context/CartContext';
 import { Toaster } from 'react-hot-toast';
 import { LanguageProvider } from './context/LanguageContext';
+import { OrderProvider } from './context/OrderContext';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -22,18 +23,20 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.className} bg-blue-900 text-blue-900`}>
-        <LanguageProvider>
-            <CartProvider>
-              <div className="flex flex-col min-h-screen">
-                <Header />
-                <main className="flex-1">
-                  <Toaster position="top-center" />
-                  {children}
-                </main>
-                <Footer />
-              </div>
-            </CartProvider>
-        </LanguageProvider>
+        <OrderProvider>
+          <LanguageProvider>
+              <CartProvider>
+                <div className="flex flex-col min-h-screen">
+                  <Header />
+                  <main className="flex-1">
+                    <Toaster position="top-center" />
+                    {children}
+                  </main>
+                  <Footer />
+                </div>
+              </CartProvider>
+          </LanguageProvider>
+        </OrderProvider>
       </body>
     </html>
   );

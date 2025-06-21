@@ -1,0 +1,48 @@
+from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy.orm import Session
+from app import crud, schemas, database, models
+from app.dependencies import get_current_user, get_current_admin_user
+
+router = APIRouter(prefix="/products", tags=["Products"])
+
+@router.post("/", response_model=schemas.ProductOut)
+def create_product(
+    product: schemas.ProductCreate,
+    db: Session = Depends(database.get_db),
+    current_admin: models.User = Depends(get_current_admin_user)
+):
+    return crud.create_product(db, product)
+
+@router.get("/", response_model=list[schemas.ProductOut])
+def list_products(skip: int = 0, limit: int = 100, db: Session = Depends(database.get_db)):
+    return crud.get_products(db, skip, limit)
+
+@router.get("/{product_id}", response_model=schemas.ProductOut)
+def read_product(product_id: int, db: Session = Depends(database.get_db)):
+    product = crud.get_product(db, product_id)
+    if not product:
+        raise HTTPException(status_code=404, detail="Product not found")
+    return product
+
+@router.put("/{product_id}", response_model=schemas.ProductOut)
+def update_product(
+    product_id: int,
+    updates: schemas.ProductUpdate,
+    db: Session = Depends(database.get_db),
+    current_admin: models.User = Depends(get_current_admin_user)
+):
+    updated = crud.update_product(db, product_id, updates)
+    if not updated:
+        raise HTTPException(status_code=404, detail="Product not found")
+    return updated
+
+@router.delete("/{product_id}", response_model=schemas.ProductOut)
+def delete_product(
+    product_id: int,
+    db: Session = Depends(database.get_db),
+    current_admin: models.User = Depends(get_current_admin_user)
+):
+    deleted = crud.delete_product(db, product_id)
+    if not deleted:
+        raise HTTPException(status_code=404, detail="Product not found")
+    return deleted
