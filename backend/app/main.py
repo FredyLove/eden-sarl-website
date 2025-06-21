@@ -6,7 +6,7 @@ from .database import engine, SessionLocal, Base
 from fastapi.security import OAuth2PasswordRequestForm
 from .auth import create_access_token
 from .schemas import Token
-from app.routes import user, product
+from app.routes import user, product, delivery
 from app.database import get_db
 
 Base.metadata.create_all(bind=engine)
@@ -15,6 +15,7 @@ app = FastAPI()
 
 app.include_router(user.router)
 app.include_router(product.router)
+app.include_router(delivery.router)
 
 @app.post("/register", response_model=schemas.UserOut)
 def register(user: schemas.UserCreate, db: Session = Depends(get_db)):

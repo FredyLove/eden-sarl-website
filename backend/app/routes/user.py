@@ -58,3 +58,39 @@ def update_user_role(
     user.role = role
     db.commit()
     return {"message": "User role updated successfully"}
+
+@router.put("/{user_id}/reset-password")
+def reset_user_password(
+    user_id: int,
+    new_password: str,
+    db: Session = Depends(get_db),
+    current_admin: models.User = Depends(get_current_admin_user)
+):
+    user = db.query(models.User).filter(models.User.id == user_id).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    from app.auth import get_password_hash
+    user.hashed_password = get_password_hash(new_password)
+    db.commit()
+    return {"message": "Password reset successfully"}
+
+@router.put("/{user_id}")
+def update_user_info(
+    user_id: int,
+    user_update: schemas.UserUpdate,
+    db: Session = Depends(get_db),
+    current_admin: models.User = Depends(get_current_admin_user)
+):
+    user = db.query(models.User).filter(models.User.id == user_id).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    if user_update.username:
+        user.username = user_update.username
+    if user_update.email:
+        user.email = user_update.email
+
+    db.commit()
+    db.refresh(user)
+    return {"message": "User updated successfully"}

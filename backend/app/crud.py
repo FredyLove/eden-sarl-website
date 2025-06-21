@@ -61,3 +61,28 @@ def delete_product(db: Session, product_id: int):
     db.delete(product)
     db.commit()
     return product
+
+# Deliveries
+
+def create_delivery_request(db: Session, user_id: int, request_data: schemas.DeliveryRequestCreate):
+    delivery = models.DeliveryRequest(
+        user_id=user_id,
+        product_id=request_data.product_id,
+        address=request_data.address,
+        quantity=request_data.quantity
+        
+    )
+    db.add(delivery)
+    db.commit()
+    db.refresh(delivery)
+    return delivery
+
+def get_all_delivery_requests(db: Session):
+    return db.query(models.DeliveryRequest).all()
+
+def update_delivery_status(db: Session, delivery_id: int, status: str):
+    delivery = db.query(models.DeliveryRequest).filter(models.DeliveryRequest.id == delivery_id).first()
+    if delivery:
+        delivery.status = status
+        db.commit()
+    return delivery

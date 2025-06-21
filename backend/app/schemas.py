@@ -2,6 +2,7 @@
 from datetime import datetime
 from pydantic import BaseModel, EmailStr
 from typing import Optional
+from enum import Enum
 
 # User
 
@@ -21,6 +22,11 @@ class UserOut(BaseModel):
     class Config:
         orm_mode = True
 
+class UserUpdate(BaseModel):
+    username: Optional[str] = None
+    email: Optional[EmailStr] = None
+    
+    
 # Token
 
 class Token(BaseModel):
@@ -66,3 +72,29 @@ class ProductOut(ProductBase):
 
     class Config:
         orm_mode = True
+
+# Deleveries
+
+class DeliveryStatus(str, Enum):
+    pending = "pending"
+    approved = "approved"
+    rejected = "rejected"
+
+class DeliveryStatusUpdate(BaseModel):
+    status: DeliveryStatus
+
+class DeliveryRequestCreate(BaseModel):
+    product_id: int
+    address: str
+    quantity: int
+
+class DeliveryRequestOut(BaseModel):
+    id: int
+    user_id: int
+    product_id: int
+    quantity: int
+    address: str
+    status: DeliveryStatus
+
+    class Config:
+        from_attributes = True

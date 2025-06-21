@@ -1,6 +1,8 @@
 # app/models.py
-from sqlalchemy import Column, DateTime, Float, Integer, String, Boolean
+from sqlalchemy import Column, DateTime, Float, ForeignKey, Integer, String, Boolean, Enum
 from .database import Base
+from sqlalchemy.orm import relationship
+import enum
 from datetime import datetime
 
 
@@ -29,3 +31,21 @@ class Product(Base):
     rating = Column(Float, default=0.0)
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    
+class DeliveryStatus(str, enum.Enum):
+    pending = "pending"
+    approved = "approved"
+    rejected = "rejected"
+
+class DeliveryRequest(Base):
+    __tablename__ = "delivery_requests"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"))
+    product_id = Column(Integer, ForeignKey("products.id"))
+    address = Column(String, nullable=False)
+    status = Column(Enum(DeliveryStatus), default="pending")
+    quantity = Column(Integer, nullable=False)
+
+    user = relationship("User")
+    product = relationship("Product")
